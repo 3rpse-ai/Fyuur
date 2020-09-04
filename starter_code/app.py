@@ -44,6 +44,47 @@ class Genre(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, unique=True)
 
+
+def get_genre_choices():
+  print("we are doing something")
+  genres = Genre.query.all()
+  if not genres:
+
+    genre_list=[
+              ('Alternative', 'Alternative'),
+              ('Blues', 'Blues'),
+              ('Classical', 'Classical'),
+              ('Country', 'Country'),
+              ('Electronic', 'Electronic'),
+              ('Folk', 'Folk'),
+              ('Funk', 'Funk'),
+              ('Hip-Hop', 'Hip-Hop'),
+              ('Heavy Metal', 'Heavy Metal'),
+              ('Instrumental', 'Instrumental'),
+              ('Jazz', 'Jazz'),
+              ('Musical Theatre', 'Musical Theatre'),
+              ('Pop', 'Pop'),
+              ('Punk', 'Punk'),
+              ('R&B', 'R&B'),
+              ('Reggae', 'Reggae'),
+              ('Rock n Roll', 'Rock n Roll'),
+              ('Soul', 'Soul'),
+              ('Other', 'Other'),
+          ]
+    
+    for genre in genre_list:
+      entry = Genre(name=genre[0])
+      db.session.add(entry)
+    db.session.commit()
+    genres = Genre.query.all()
+
+
+  choices = []
+  for genre in genres:
+    choice = (genre.id, genre.name)
+    choices.append(choice)
+  return choices
+
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
