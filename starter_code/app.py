@@ -13,6 +13,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
+from forms import VenueForm
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -97,6 +98,9 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, default=False)
+    seeking_description = db.Column(db.String)
+    website = db.Column(db.String(500))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -204,19 +208,20 @@ def show_venue(venue_id):
   # TODO: replace with real venue data from the venues table, using venue_id
   # TODO: input shows from show table, input image & website link
   venue = Venue.query.get(venue_id)
+  genres = [genre.name for genre in venue.genres]
   data={
     "id": venue.id,
     "name": venue.name,
-    "genres": venue.genres,
+    "genres": genres,
     "address": venue.address,
     "city": venue.city,
     "state": venue.state,
     "phone": venue.phone,
-    "website": "https://www.themusicalhop.com",
+    "website": venue.website,
     "facebook_link": venue.facebook_link,
-    "seeking_talent": True,
-    "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
-    "image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
+    "seeking_talent": venue.seeking_talent,
+    "seeking_description": venue.seeking_description,
+    "image_link": venue.image_link,
     "past_shows": [{
       "artist_id": 4,
       "artist_name": "Guns N Petals",
@@ -233,16 +238,22 @@ def show_venue(venue_id):
 #  Create Venue
 #  ----------------------------------------------------------------
 
+class VenueGenreForm(VenueForm):
+  genres = SelectMultipleField(
+        # needed to avoid circular import 
+        'genres', validators=[DataRequired()],
+        choices=get_genre_choices()
+  )
+
 @app.route('/venues/create', methods=['GET'])
 def create_venue_form():
-  form = VenueForm()
+  form = VenueGenreForm()
   return render_template('forms/new_venue.html', form=form)
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
   print('---------------------------------')
-  print(request.form.getlist('genres'))
-  print(type(request.form.getlist('genres')))
+  print(request.form.getlist(''))
   try:
     genreIds = request.form.getlist('genres')
     genres = []
@@ -251,6 +262,19 @@ def create_venue_submission():
       genre = Genre.query.get(genreId)
       genres.append(genre)
 
+    seeking_talent = request.form.get('seeking_checkbox')
+    seeking_description = request.form.get('seeking_description')
+
+    print(seeking_talent)
+    print(seeking_description)
+
+    if not seeking_talent:
+      print("Not seeking talent")
+      seeking_description = None
+    
+
+    
+
     new_venue = Venue(
     name=request.form.get('name'),
     city=request.form.get('city'),
@@ -258,8 +282,9 @@ def create_venue_submission():
     address=request.form.get('address'),
     genres=genres,
     phone=request.form.get('phone'),
-    #image_link=request.form.get('image_link'),
-    facebook_link=request.form.get('facebook_link')
+    image_link=request.form.get('image_link'),
+    facebook_link=request.form.get('facebook_link'),
+    website=request.form.get('website_link')
     )
     db.session.add(new_venue)
     flash('Venue ' + request.form['name'] + ' was successfully listed!')

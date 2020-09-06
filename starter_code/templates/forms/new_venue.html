@@ -41,6 +41,10 @@
       <label for="image_link">Image Link</label>
       {{ form.image_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
     </div>
+    <div class="form-group">
+      <label for="website_link">Website</label>
+      {{ form.website_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
+    </div>
     <div class="form-group seeking-checkbox" style="display: flex;">
       {{ form.seeking_checkbox(class_ = 'control checkbox', id = 'checkbox', autofocus = true) }}
       <label style="margin-inline-start: 8px;" for="seeking_checkbox">Seeking Talent</label>
@@ -49,7 +53,7 @@
 
     <div id="seeking-form" class="form-group" style="display: none;">
       <label for="seeking_description">Please Describe Who You Are Looking For</label>
-      {{ form.seeking_description(class_ = 'form-control', autofocus = true) }}
+      {{ form.seeking_description(class_ = 'form-control', id= 'seeking-description-input', autofocus = true) }}
     </div>
     
 
@@ -59,6 +63,7 @@
   <script>
     const checkbox = document.getElementById("checkbox");
     const seeking_description = document.getElementById("seeking-form");
+    const seeking_description_input = document.getElementById("seeking-description-input");
     console.log(checkbox);
     console.log(seeking_description);
     checkbox.addEventListener('click', function () {
@@ -66,10 +71,12 @@
       if (this.checked) {
         seeking_description.style.display = 'block';
         console.log("checked")
+        seeking_description_input.required = true;
 
       } else {
         seeking_description.style.display = 'none';
         console.log("unchecked")
+        seeking_description_input.required = false;
       }
     })
 
