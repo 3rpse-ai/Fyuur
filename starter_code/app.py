@@ -47,60 +47,63 @@ class Genre(db.Model):
 
 
 def get_genre_choices():
-  print("we are doing something")
-  genres = Genre.query.all()
-  if not genres:
-
-    genre_list=[
-              ('Alternative', 'Alternative'),
-              ('Blues', 'Blues'),
-              ('Classical', 'Classical'),
-              ('Country', 'Country'),
-              ('Electronic', 'Electronic'),
-              ('Folk', 'Folk'),
-              ('Funk', 'Funk'),
-              ('Hip-Hop', 'Hip-Hop'),
-              ('Heavy Metal', 'Heavy Metal'),
-              ('Instrumental', 'Instrumental'),
-              ('Jazz', 'Jazz'),
-              ('Musical Theatre', 'Musical Theatre'),
-              ('Pop', 'Pop'),
-              ('Punk', 'Punk'),
-              ('R&B', 'R&B'),
-              ('Reggae', 'Reggae'),
-              ('Rock n Roll', 'Rock n Roll'),
-              ('Soul', 'Soul'),
-              ('Other', 'Other'),
-          ]
-    
-    for genre in genre_list:
-      entry = Genre(name=genre[0])
-      db.session.add(entry)
-    db.session.commit()
+  
+  if __name__ == "__main__":
+    print("we are doing something")
     genres = Genre.query.all()
+    if not genres:
+
+      genre_list=[
+                ('Alternative', 'Alternative'),
+                ('Blues', 'Blues'),
+                ('Classical', 'Classical'),
+                ('Country', 'Country'),
+                ('Electronic', 'Electronic'),
+                ('Folk', 'Folk'),
+                ('Funk', 'Funk'),
+                ('Hip-Hop', 'Hip-Hop'),
+                ('Heavy Metal', 'Heavy Metal'),
+                ('Instrumental', 'Instrumental'),
+                ('Jazz', 'Jazz'),
+                ('Musical Theatre', 'Musical Theatre'),
+                ('Pop', 'Pop'),
+                ('Punk', 'Punk'),
+                ('R&B', 'R&B'),
+                ('Reggae', 'Reggae'),
+                ('Rock n Roll', 'Rock n Roll'),
+                ('Soul', 'Soul'),
+                ('Other', 'Other'),
+            ]
+      
+      for genre in genre_list:
+        entry = Genre(name=genre[0])
+        db.session.add(entry)
+      db.session.commit()
+      genres = Genre.query.all()
 
 
   choices = []
-  for genre in genres:
-    choice = (genre.id, genre.name)
-    choices.append(choice)
+  if __name__ == "__main__":
+    for genre in genres:
+      choice = (genre.id, genre.name)
+      choices.append(choice)
   return choices
 
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(120))
-    address = db.Column(db.String(120))
+    name = db.Column(db.String, nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    state = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(120), nullable=False)
     genres = db.relationship('Genre', secondary=venue_genres, backref=db.backref('venues', lazy=True))
-    phone = db.Column(db.String(120))
-    image_link = db.Column(db.String(500))
-    facebook_link = db.Column(db.String(120))
-    seeking_talent = db.Column(db.Boolean)
+    phone = db.Column(db.String(120), nullable=False)
+    image_link = db.Column(db.String(500), nullable=False)
+    facebook_link = db.Column(db.String(120), nullable=False)
+    seeking_talent = db.Column(db.Boolean, nullable=False)
     seeking_description = db.Column(db.String)
-    website = db.Column(db.String(500))
+    website = db.Column(db.String(500), nullable=False)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
@@ -108,17 +111,17 @@ class Artist(db.Model):
     __tablename__ = 'Artist'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(120))
-    phone = db.Column(db.String(120))
+    name = db.Column(db.String, nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    state = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(120), nullable=False)
     # implemented genre relational table for artists as there is a n:n relationship
     genres = db.relationship('Genre', secondary=artist_genres, backref=db.backref('artists', lazy=True))
-    image_link = db.Column(db.String(500))
-    facebook_link = db.Column(db.String(120))
-    seeking_talent = db.Column(db.Boolean, default=False)
+    image_link = db.Column(db.String(500), nullable=False)
+    facebook_link = db.Column(db.String(120), nullable=False)
+    seeking_talent = db.Column(db.Boolean, default=False, nullable=False)
     seeking_description = db.Column(db.String)
-    website = db.Column(db.String(500))
+    website = db.Column(db.String(500), nullable=False)
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
