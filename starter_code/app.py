@@ -89,6 +89,7 @@ def get_genre_choices():
       choices.append(choice)
   return choices
 
+
 class Venue(db.Model):
     __tablename__ = 'Venue'
 
