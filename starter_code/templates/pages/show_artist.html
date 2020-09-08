@@ -3,10 +3,16 @@
 {% block content %}
 <div class="row">
 	<div class="col-sm-6">
-		<h1 class="monospace">
-			{{ artist.name }}
-		</h1>
-		<p class="subtitle">
+		<div style="display: flex; align-items: baseline;">
+			<h1 class="monospace">
+				{{ artist.name }}
+			</h1>
+			<div style="margin-inline-start: 40px;">
+				<button id="edit" class="btn btn-primary btn-md">Edit</button>
+				<button id="delete" class="btn btn-default btn-md">Delete</button>
+			</div>
+		</div>
+		<p class="subtitle" id="subtitle" value={{ artist.id }}>
 			ID: {{ artist.id }}
 		</p>
 		<div class="genres">
@@ -42,6 +48,33 @@
 	<div class="col-sm-6">
 		<img src="{{ artist.image_link }}" alt="Venue Image" />
 	</div>
+	<script>
+		const id = document.getElementById("subtitle").getAttribute("value");
+		document.getElementById("edit").onclick = function (e) {
+			window.location.href = '/artists/' + id + '/edit';
+		}
+		document.getElementById("delete").onclick = function (e) {
+			console.log('event', e);
+			const newCompleted = e.target.checked;
+			fetch('/artists/' + id, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(function (response) {
+					console.log(response);
+					return response.json();
+				})
+				.then(function (jsonResponse) {
+					console.log(jsonResponse);
+					success = jsonResponse['success']
+					if (success) {
+						window.location.href = '/'
+					}
+				});
+		}
+	</script>
 </div>
 <section>
 	<h2 class="monospace">{{ artist.upcoming_shows_count }} Upcoming {% if artist.upcoming_shows_count == 1 %}Show{% else %}Shows{% endif %}</h2>

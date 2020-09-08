@@ -177,7 +177,18 @@ class ArtistForm(Form):
         'phone'
     )
     image_link = StringField(
-        'image_link'
+        # TODO implement enum restriction
+        'image_link', validators=[URL()]
+    )
+    website_link = StringField(
+        # TODO implement enum restriction
+        'image_link', validators=[URL()]
+    )
+    seeking_checkbox = BooleanField(
+        'seeking_checkbox'
+    )
+    seeking_description = StringField(
+        'seeking_description'
     )
     #genres = SelectMultipleField(
      #   # TODO implement enum restriction
@@ -187,10 +198,6 @@ class ArtistForm(Form):
     facebook_link = StringField(
         # TODO implement enum restriction
         'facebook_link', validators=[URL()]
-    )
-    image_link = StringField(
-        # TODO implement enum restriction
-        'image_link', validators=[URL()]
     )
 
 # TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
