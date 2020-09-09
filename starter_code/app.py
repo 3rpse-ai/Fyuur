@@ -222,14 +222,16 @@ def show_venue(venue_id):
   past_shows = []
   upcoming_shows = []
 
-  for show in venue.shows:
+  shows = db.session.query(Show, Artist).join(Artist).filter(Show.venue_id==venue_id).all()
+
+  for show in shows:
     show_entry = {
-      "artist_id": show.artist.id,
-      "artist_name": show.artist.name,
-      "artist_image_link": show.artist.image_link,
-      "start_time": show.start_time
+      "artist_id": show[1].id,
+      "artist_name": show[1].name,
+      "artist_image_link": show[1].image_link,
+      "start_time": show[0].start_time
     }
-    showdate = datetime.strptime(show.start_time, "%Y-%m-%d %H:%M:%S")
+    showdate = datetime.strptime(show[0].start_time, "%Y-%m-%d %H:%M:%S")
     now = datetime.now()
     if showdate < now:
       past_shows.append(show_entry)
@@ -379,14 +381,16 @@ def show_artist(artist_id):
   past_shows = []
   upcoming_shows = []
 
-  for show in artist.shows:
+  shows = db.session.query(Show, Venue).join(Venue).filter(Show.artist_id==artist_id).all()
+
+  for show in shows:
     show_entry = {
-      "artist_id": artist.id,
-      "venue_name": show.venue.name,
-      "venue_image_link": show.venue.image_link,
-      "start_time": show.start_time
+      "artist_id": show[0].artist_id,
+      "venue_name": show[1].name,
+      "venue_image_link": show[1].image_link,
+      "start_time": show[0].start_time
     }
-    showdate = datetime.strptime(show.start_time, "%Y-%m-%d %H:%M:%S")
+    showdate = datetime.strptime(show[0].start_time, "%Y-%m-%d %H:%M:%S")
     now = datetime.now()
     if showdate < now:
       past_shows.append(show_entry)
