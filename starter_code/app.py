@@ -49,7 +49,7 @@ class Genre(db.Model):
 def get_genre_choices():
   
   if __name__ == "__main__":
-    print("we are doing something")
+
     genres = Genre.query.all()
     if not genres:
 
@@ -181,7 +181,7 @@ def venues():
           "num_upcoming_shows": 0,
         }
         venue_list.append(venue)
-        print(venue_list)
+
 
       city_entry = {
         "city": city[0],
@@ -198,7 +198,6 @@ def search_venues():
   # seach for Hop should return "The Musical Hop".
   # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
   venues = Venue.query.filter(Venue.name.ilike('%' + request.form.get('search_term', '') + '%')).all()
-  print(venues)
   data = []
   for venue in venues:
     venue_entry = {
@@ -285,8 +284,6 @@ def create_venue_submission():
     seeking_talent = request.form.get('seeking_checkbox')
     seeking_description = request.form.get('seeking_description')
 
-    print(seeking_talent)
-    print(seeking_description)
 
     if seeking_talent == 'y':
       seeking_talent = True
@@ -294,7 +291,6 @@ def create_venue_submission():
       seeking_talent = False
 
     if not seeking_talent:
-      print("Not seeking talent")
       seeking_description = None
     
 
@@ -575,8 +571,6 @@ def create_artist_submission():
     seeking_talent = request.form.get('seeking_checkbox')
     seeking_description = request.form.get('seeking_description')
 
-    print(seeking_talent)
-    print(seeking_description)
 
     if seeking_talent == 'y':
       seeking_talent = True
@@ -584,7 +578,6 @@ def create_artist_submission():
       seeking_talent = False
 
     if not seeking_talent:
-      print("Not seeking talent")
       seeking_description = None
     
 
